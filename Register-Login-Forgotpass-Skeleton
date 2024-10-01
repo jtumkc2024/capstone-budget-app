@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <div id="loginSection">
+        <h2>Login</h2>
+        <form id="loginForm" action="/login" method="post">
+            <div>
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="username" required>
+                <span id="loginUsernameError" class="error"></span>
+            </div>
+            <div>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="password" required>
+                <span id="loginPasswordError" class="error"></span>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <button id="showRegister">Register</button>
+        <button id="showForgotPassword">Forgot Password</button>
+    </div>
+
+    <div id="registerSection" class="hidden">
+        <h2>Register</h2>
+        <form id="registerForm" action="/register" method="post">
+            <div>
+                <label for="registerUsername">Username:</label>
+                <input type="text" id="registerUsername" name="username" required>
+                <span id="registerUsernameError" class="error"></span>
+            </div>
+            <div>
+                <label for="registerEmail">Email:</label>
+                <input type="email" id="registerEmail" name="email" required>
+                <span id="registerEmailError" class="error"></span>
+            </div>
+            <div>
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" name="password" required>
+                <span id="registerPasswordError" class="error"></span>
+            </div>
+            <div>
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <span id="confirmPasswordError" class="error"></span>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <button id="backToLogin">Back to Login</button>
+    </div>
+
+    <div id="forgotPasswordSection" class="hidden">
+        <h2>Forgot Password</h2>
+        <form id="forgotPasswordForm" action="/forgot-password" method="post">
+            <div>
+                <label for="forgotPasswordUsername">Username:</label>
+                <input type="text" id="forgotPasswordUsername" name="username" required>
+                <span id="forgotPasswordUsernameError" class="error"></span>
+            </div>
+            <button type="submit">Send Reset Link</button>
+        </form>
+        <button id="backToLoginFromForgot">Back to Login</button>
+    </div>
+
+    <script>
+        // Login Form Submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username) {
+                document.getElementById('loginUsernameError').textContent = 'This field is required';
+                return;
+            }
+            if (!password) {
+                document.getElementById('loginPasswordError').textContent = 'This field is required';
+                return;
+            }
+
+            // Here we would typically send the form to the server, I am just submitting the form for now
+            this.submit();
+        });
+
+        // Register Form Submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!username) {
+                document.getElementById('registerUsernameError').textContent = 'This is a required field';
+                return;
+            }
+            if (!email) {
+                document.getElementById('registerEmailError').textContent = 'This is a required field';
+                return;
+            }
+            if (!password) {
+                document.getElementById('registerPasswordError').textContent = 'This is a required field';
+                return;
+            }
+            if (password.length < 8) {
+                document.getElementById('registerPasswordError').textContent = 'Password must be above 8 characters in length';
+                return;
+            }
+            if (!confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'This is a required field';
+                return;
+            }
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords must match';
+                return;
+            }
+
+            // Hash password before sending to server
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                    return;
+                }
+                document.getElementById('registerPassword').value = hashedPassword;
+                document.getElementById('confirmPassword').value = hashedPassword;
+                this.submit();
+            });
+        });
+
+        // Forgot Password Form Submission
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('forgotPasswordUsername').value;
+
+            if (!username) {
+                document.getElementById('forgotPasswordUsernameError').textContent = 'This field is required';
+                return;
+            }
+
+            // Submit the form to the server
+            this.submit();
+        });
+
+        // Navigation between sections
+        document.getElementById('showRegister').addEventListener('click', function() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.remove('hidden');
+        });
+
+        document.getElementById('backToLogin').addEventListener('click', function() {
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        });
+
+        document.getElementById('showForgotPassword').addEventListener('click', function() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('forgotPasswordSection').classList.remove('hidden');
+        });
+
+        document.getElementById('backToLoginFromForgot').addEventListener('click', function() {
+            document.getElementById('forgotPasswordSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
