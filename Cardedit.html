@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Card</title>
+    <style>
+        /* Style for error messages */
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        
+        .error-input {
+            border-color: red;
+        }
+       
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Edit Card</h2>
+    <!-- Form to add a card -->
+    <form id="editCardForm">
+        <!-- Name on Card field -->
+        <label for="cardName">Name on Card</label>
+        <input type="text" id="cardName" name="cardName" placeholder="Cardholder Name">
+        <span class="error" id="cardNameError"></span>
+
+        <!-- Card Number field -->
+        <label for="cardNumber">Card Number</label>
+        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456">
+        <span class="error" id="cardNumberError"></span>
+
+        <!-- Expiration Date field -->
+        <label for="expiryDate">Expiration Date (MM/YY)</label>
+        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY">
+        <span class="error" id="expiryDateError"></span>
+
+        <!-- Security Code field -->
+        <label for="securityCode">Security Code</label>
+        <input type="text" id="securityCode" name="securityCode" placeholder="CVV">
+        <span class="error" id="securityCodeError"></span>
+
+        <!-- Add and Cancel buttons -->
+        <button type="submit">Add</button>
+        <button type="button" onclick="cancelOperation()">Cancel</button>
+    </form>
+    <script src="edit-cardscript.js"></script>
+</body>
+</html>
