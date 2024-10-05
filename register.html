@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Register</h2>
+    <form id="registerForm" action="/register" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <span id="usernameError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <span id="emailError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <span id="passwordError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" id="confirmpassword" name="confirmpassword" required>
+            <span id="confirmPasswordError" class="error"></span>
+        </div>
+
+        <div>
+            <ul>
+                <li>The password must be 8 characters in length.</li>
+                <li>The password must contain a number.</li>
+                <li>The password must contain a special character.</li>
+                <li>The password must contain an uppercase letter.</li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="login.html" target="_self"><input type="button" value="Back to Login"></a>
+            <input type="submit" id="submit" name="submit" value="Register">
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmpassword').value;
+
+            // Clear previous error messages
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            // Validate username
+            if (!username) {
+                document.getElementById('usernameError').textContent = 'Username is required';
+                return;
+            }
+
+            // Validate email
+            if (!email) {
+                document.getElementById('emailError').textContent = 'Email is required';
+                return;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Password is required';
+                return;
+            }
+
+            // Check password criteria
+            if (password.length < 8) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long';
+                return;
+            }
+            if (!/\d/.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must contain a number';
+                return;
+            }
+            if (!/[!@#$%^&*]/.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must contain a special character';
+                return;
+            }
+            if (!/[A-Z]/.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must contain an uppercase letter';
+                return;
+            }
+
+            // Validate confirm password
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                return;
+            }
+
+            // Hash password before sending to server
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                    console.error('Error hashing password:', err);
+                    return;
+                }
+                document.getElementById('password').value = hashedPassword;
+                document.getElementById('confirmpassword').value = hashedPassword;
+                this.submit();
+            });
+        });
+    </script>
+</body>
+</html>

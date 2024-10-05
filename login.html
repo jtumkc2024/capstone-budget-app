@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        .error { color: red; }
+    </style>
+</head>
+
+<body>
+    <h2>Login</h2>
+    <form id="loginForm" action="/login" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <span id="usernameError" class="error"></span>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <span id="passwordError" class="error"></span>
+        </div>
+        <div>
+            <p><a href="forgotpassword.html" target="_self">Forgot password?</a></p>
+        </div>
+        <div>
+            <a href="registerpage.html" target="_self"><input type="button" value="Register"></a>
+            <input type="submit" id="submit" name="submit" value="Login">
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Clear previous error messages
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            // Validate username
+            if (!username) {
+                document.getElementById('usernameError').textContent = 'Username is required';
+                return;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Password is required';
+                return;
+            }
+
+            // If validation passes, submit the form
+            this.submit();
+        });
+    </script>
+</body>
+</html>
