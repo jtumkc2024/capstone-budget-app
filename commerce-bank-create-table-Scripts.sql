@@ -20,17 +20,17 @@ CREATE TABLE Project (
 
 CREATE TABLE Card (
     user_id INT(10) UNSIGNED NOT NULL, -- Foreign key linking to the User table
-    card_number BIGINT(16) UNSIGNED, -- 16 digit integer for card number
+    card_number BIGINT(16) UNSIGNED NOT NULL, -- 16 digit integer for card number
     PRIMARY KEY (card_number),
-    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE -- If user is deleted, card is deleted too
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE, -- If user is deleted, card is deleted too
+    FOREIGN KEY (card_number) REFERENCES MockupBank(card_number) ON DELETE CASCADE --If the mockup bank entry is deleted, the card is deleted too
 );
 
 CREATE TABLE MockupBank (
     card_number BIGINT(16) UNSIGNED NOT NULL, -- 16 digit integer for card number
     card_owner VARCHAR(256) NOT NULL,
-    expiration INT(4) UNSIGNED, -- 4 digit integer for expiration (MMYY format)
-    security_code SMALLINT(3) UNSIGNED, -- 3 digit integer for security code
-    PRIMARY KEY (card_number, expiration, security_code), -- Composite primary key
-    FOREIGN KEY (card_number) REFERENCES Card(card_number) ON DELETE CASCADE -- If card is deleted, mockup bank record is deleted too
+    expiration INT(4) UNSIGNED NOT NULL, -- 4 digit integer for expiration (MMYY format)
+    security_code SMALLINT(3) UNSIGNED NOT NULL, -- 3 digit integer for security code
+    PRIMARY KEY (card_number, expiration, security_code) -- Composite primary key
 );
 
