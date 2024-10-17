@@ -1,4 +1,41 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface User {
+  id: number;
+  username: string;
+  password: string;
+  email: string;
+}
+
 export default function Dashboard() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [totalUsers, setTotalUsers] = useState<number>(0);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get<User[]>('http://localhost:3001/api/users');
+      setUsers(response.data);
+      console.log(users);
+    } catch (error) {
+      console.error('There was an error fetching the data!', error);
+    }
+  };
+
+  const fetchTotalUsers = async () => {
+    try {
+      const response = await axios.get<{ total_users: number }>('http://localhost:3001/api/users/count');
+      setTotalUsers(response.data.total_users);
+    } catch (error) {
+      console.error('There was an error fetching the total number of users!', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalUsers();
+    fetchUsers();
+  }, []);
+
   return (
     <div className="h-screen bg-white text-center">
       {/* <aside className="w-64 bg-white shadow-md">
@@ -39,7 +76,7 @@ export default function Dashboard() {
           {/* Dashboard Cards */}
           <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Total Users</h3>
-            <p className="text-3xl font-bold text-blue-600">1,234</p>
+            <p className="text-3xl font-bold text-blue-600">{totalUsers}</p>
           </div>
         </div>
         {/* Placeholder for more dashboard content */}
