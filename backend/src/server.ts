@@ -8,7 +8,6 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Create a MySQL connection
 const dbConfig = {
   host: '192.168.215.2',
   port: 3306,
@@ -27,7 +26,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-// New endpoint to get the total number of users
 app.get('/api/users/count', async (req, res) => {
     try {
       const connection = await mysql.createConnection(dbConfig);
@@ -37,6 +35,16 @@ app.get('/api/users/count', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+app.get('/api/users/:id', async (req, res) => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.query('select * from Project p where p.user_id = ?', [req.params.id]);
+        res.json(rows);        
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+})
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
