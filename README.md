@@ -1,6 +1,6 @@
 # capstone-budget-app
 
-To get the app running locally:
+To get the front-end running locally:
 
 1. You will need Node.js and npm installed
 
@@ -13,3 +13,8 @@ It should say something like:
 
 3. If you are trying to develop, run `npm run dev`.
 Now the app should be running on [http://localhost:5173/](http://localhost:5173/)
+
+To get the back-end running locally:
+1. navigate to the `backend` folder
+2. run `npm install`
+3. run `npm run dev`
