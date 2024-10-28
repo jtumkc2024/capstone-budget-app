@@ -8,6 +8,9 @@
     As recommended by npm, I would use a node version manager like [nvm](https://github.com/nvm-sh/nvm) to handle this.
 
 2. With Node installed, run `npm install` from the root of your project directory.
+
+ NOTE: to get to the root of a git repo, you can run `cd $(git rev-parse --show-toplevel)`
+
 It should say something like: 
 > added 274 packages, and audited 275 packages in 1s
 
