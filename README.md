@@ -15,8 +15,7 @@ It should say something like:
 Now the app should be running on [http://localhost:5173/](http://localhost:5173/)
 
 ## To get the back-end running locally:
-1. Update the datasource in `backend/java/src/main/resources/application.properties` with your local config
-2. navigate to the `backend/java` folder
-3. run `./gradlew bootRun`
-4. if you get a `permission denied: ./gradlew`
-    - try running `chmod +x gradlew`
+
+Be on the dashboard branch, in terminal navigate to backend/ts, run `NPM install`.  
+
+run `NPM run dev` (now your backend server should be running on  [http://localhost:3001/](http://localhost:3001/).    
