@@ -1,9 +1,9 @@
 export interface Project {
-    projectId: string;
-    userId: string;
+    projectId: number;
+    userId: number;
     projectTitle: string;
     projectDescription: string;
-    renewable: string;
-    priority: string;
+    renewable: number;
+    priority: number;
     deadline: string;
 }

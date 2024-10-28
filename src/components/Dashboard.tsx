@@ -3,6 +3,20 @@ import { useEffect, useState } from "react";
 import {User} from "../models/User.ts";
 import {Project} from "../models/Project.ts";
 
+type totalUsersResponse = {
+  total_users: number;
+}
+
+type projectsResponse = {
+  deadline : string;
+  priority : number;
+  project_description : string;
+  project_id : number;
+  project_title : string;
+  renewable : number;
+  user_id : number;
+}
+
 export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
@@ -10,7 +24,7 @@ export default function Dashboard() {
 
   const fetchUsers = async () => {
       try {
-          const response = await axios.get<User[]>('http://localhost:8080/users', {withCredentials: true});
+          const response = await axios.get<User[]>('http://localhost:3001/api/users');
           setUsers(response.data);
       } catch (error) {
           console.error('There was an error fetching the data!', error);
@@ -19,8 +33,8 @@ export default function Dashboard() {
 
   const fetchTotalUsers = async () => {
     try {
-      const response = await axios.get<number>('http://localhost:8080/userCount', {withCredentials: true});
-      setTotalUsers(response.data);
+      const response = await axios.get<totalUsersResponse>('http://localhost:3001/api/users/count');
+      setTotalUsers(response.data.total_users);
     } catch (error) {
       console.error('There was an error fetching the total number of users!', error);
     }
@@ -28,8 +42,17 @@ export default function Dashboard() {
 
   const fetchProject = async (id: number) => {
     try {
-      const response = await axios.get<Project[]>(`http://localhost:8080/api/projects/user/${id}`, {withCredentials: true});
-      setProjects(response.data);
+      const response = await axios.get<projectsResponse[]>(`http://localhost:3001/api/users/${id}`);
+      
+      setProjects(response.data.map((project) => ({
+        projectId: project.project_id,
+        projectTitle: project.project_title,
+        projectDescription: project.project_description,
+        deadline: project.deadline,
+        priority: project.priority,
+        renewable: project.renewable,
+        userId: project.user_id,
+      })));
     } catch (error) {
       console.error('There was an error fetching the project!', error);
     }
