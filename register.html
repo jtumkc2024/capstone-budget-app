@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        .error { color: red; }
+    </style>
+    <!-- <script type="text/javascript" src="SQLStatements.js"></script> -->
+</head>
+<body style = "display:grid; place-content: center;">
+    <h2>Register</h2>
+    <form id="registerForm">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+            <span id="usernameError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+            <span id="emailError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <span id="passwordError" class="error"></span>
+        </div>
+
+        <div>
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" id="confirmpassword" name="confirmpassword">
+            <span id="confirmPasswordError" class="error"></span>
+        </div>
+
+        <div>
+            <ul>
+                <li>The password must be 8 characters in length.</li>
+                <li>The password must contain a number.</li>
+                <li>The password must contain a special character.</li>
+                <li>The password must contain an uppercase letter.</li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="login.html" target="_self"><input type="button" value="Back to Login"></a>
+            <button type="submit" id="submit" name="submit">Register</button>
+        </div>
+    </form>
+
+    <script src="register-script.js"></script>
+</body>
+</html>

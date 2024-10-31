@@ -1,0 +1,48 @@
+<DOCTYPE! html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width = devide-width, initial-scale = 1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+	.error {
+		color: red;
+	}
+    </style>
+
+</head>
+
+<body>
+<div class = "border-bottom">
+    <a href = "dashboard.html" target = "_self"><button id = "cancel" style="margin:25px">Back to Dashboard</button></a>
+    <div id = "profile picture">
+        <image src = "profile-picture-placeholder.jpg" alt = "Profile Picture" style = "display: block; margin-left:auto; margin-right: auto; border-radius:50%" height = "200" width = "200">
+    </div>
+    <div>
+        <button type = "button" style = "display: block; margin-left:auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px">Change picture</button>
+    </div>
+</div>
+
+    <div class="d-flex justify-content-center">
+        <form id="passwordChange">
+            <label for="password">New Password</label><br>
+            <input type = "password" id = "password" name = "password">
+	    <span id="passwordError" class="error"></span><br>
+            <label for="confirmPassword">Confirm Password</label><br>
+            <input type = "password" id = "confirmPassword" name = "confirmPassword">
+	    <span id="confirmPasswordError" class="error"></span><br>
+        <div>
+            <ul>
+                <li>The password must be 8 characters in length.</li>
+                <li>The password must contain a number.</li>
+                <li>The password must contain a special character.</li>
+                <li>The password must contain an uppercase letter.</li>
+            </ul>
+        </div>
+            <button type = "submit" style = "margin-top:10px">Change Password</button>
+        </form>
+    </div>
+	<script src = "profile-settings.js"></script>
+</body>
+</html>
