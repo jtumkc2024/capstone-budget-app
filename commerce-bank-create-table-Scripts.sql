@@ -3,6 +3,7 @@ CREATE TABLE User (
     username VARCHAR(256) NOT NULL,
     password VARCHAR(256) NOT NULL,
     email VARCHAR(256) NOT NULL,
+    profile_picture TINYINT(1) UNSIGNED NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -26,11 +27,21 @@ CREATE TABLE Card (
     FOREIGN KEY (card_number) REFERENCES MockupBank(card_number) ON DELETE CASCADE --If the mockup bank entry is deleted, the card is deleted too
 );
 
+CREATE TABLE Accounts (
+    account_number BIGINT(12) UNSIGNED NOT NULL, --Account number of the user
+    transaction_amount BIGINT(16) UNSIGNED NOT NULL, --Amount of a transaction
+    transaction_type VARCHAR(256) NOT NULL, --The type of transaction (incoming, direct deposit, etc)
+    transaction_date DATE NOT NULL, --The date the transaction went through
+    PRIMARY KEY (account_number)
+);
+
 CREATE TABLE MockupBank (
     card_number BIGINT(16) UNSIGNED NOT NULL, -- 16 digit integer for card number
     card_owner VARCHAR(256) NOT NULL,
     expiration INT(4) UNSIGNED NOT NULL, -- 4 digit integer for expiration (MMYY format)
     security_code SMALLINT(3) UNSIGNED NOT NULL, -- 3 digit integer for security code
+    account_number BIGINT(12) UNSIGNED NOT NULL,
     PRIMARY KEY (card_number, expiration, security_code) -- Composite primary key
+    FOREIGN KEY account_number REFERENCES Accounts(account_number) ON DELETE CASCADE --If the card is deleted from the accounts list, this entry will delete too
 );
 
