@@ -2,10 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "ts-node src/server.js",
-    "dev": "nodemon --watch 'src/**/*.js' --exec 'ts-node' src/server.js"
+    "dev": "nodemon --watch 'src/**/*.js'"
   },
   "keywords": [],
   "author": "",
