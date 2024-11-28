@@ -1,0 +1,129 @@
+1. Create a New Project
+Route: POST /api/project/create
+
+Example Request: http
+
+POST http://localhost:3000/api/project/create
+Content-Type: application/json
+Body:
+{
+  "user_id": 1,
+  "project_title": "Build a Website",
+  "project_description": "Create a responsive website for a client.",
+  "renewable": true,
+  "priority": "High",
+  "deadline": "2024-12-31"
+}
+
+Example Response: json
+
+{
+  "message": "Project created successfully",
+  "projectId": 101
+}
+
+2. Fetch All Projects
+Route: GET /api/project/all
+
+Example Request: http
+
+GET http://localhost:3000/api/project/all
+
+Example Response: json
+
+[
+  {
+    "project_id": 101,
+    "user_id": 1,
+    "project_title": "Build a Website",
+    "project_description": "Create a responsive website for a client.",
+    "renewable": true,
+    "priority": "High",
+    "deadline": "2024-12-31"
+  },
+  {
+    "project_id": 102,
+    "user_id": 2,
+    "project_title": "Data Analysis",
+    "project_description": "Analyze sales data for Q3.",
+    "renewable": false,
+    "priority": "Medium",
+    "deadline": "2024-11-30"
+  }
+]
+
+3. Fetch Projects by User ID
+Route: GET /api/project/user/:user_id
+
+Example Request: http
+
+GET http://localhost:3000/api/project/user/1
+
+Example Response: json
+
+[
+  {
+    "project_id": 101,
+    "user_id": 1,
+    "project_title": "Build a Website",
+    "project_description": "Create a responsive website for a client.",
+    "renewable": true,
+    "priority": "High",
+    "deadline": "2024-12-31"
+  }
+]
+
+If No Projects Found: json
+
+{
+  "error": "No projects found for this user"
+}
+
+
+4. Update a Project by Project ID
+Route: PUT /api/project/update/:project_id
+
+Example Request: http
+
+PUT http://localhost:3000/api/project/update/101
+Content-Type: application/json
+Body:
+{
+  "project_title": "Build a Modern Website",
+  "project_description": "Create a modern and responsive website for a client.",
+  "renewable": true,
+  "priority": "High",
+  "deadline": "2024-12-31"
+}
+
+Example Response: json
+
+{
+  "message": "Project updated successfully"
+}
+
+If Project Not Found: json
+
+{
+  "error": "Project not found"
+}
+
+
+5. Delete a Project by Project ID
+Route: DELETE /api/project/delete/:project_id
+
+Example Request: http
+
+DELETE http://localhost:3000/api/project/delete/101
+
+Example Response:json
+
+{
+  "message": "Project deleted successfully"
+}
+
+If Project Not Found: json
+
+{
+  "error": "Project not found"
+}
