@@ -1,0 +1,110 @@
+1. Create a New Transaction
+Route: POST /api/accounts/transaction
+
+POST http://localhost:3000/api/accounts/transaction
+Content-Type: application/json
+Body:
+{
+  "account_number": "123456789",
+  "transaction_amount": 250.50,
+  "transaction_type": "credit",
+  "transaction_date": "2024-12-01"
+}
+
+Response:json
+
+{
+  "message": "Transaction recorded successfully",
+  "transactionId": 1
+}
+
+
+2. Fetch All Transactions
+Route: GET /api/accounts/transactions
+
+GET http://localhost:3000/api/accounts/transactions
+
+Response:json
+
+[
+  {
+    "id": 1,
+    "account_number": "123456789",
+    "transaction_amount": 250.50,
+    "transaction_type": "credit",
+    "transaction_date": "2024-12-01"
+  },
+  {
+    "id": 2,
+    "account_number": "987654321",
+    "transaction_amount": 150.75,
+    "transaction_type": "debit",
+    "transaction_date": "2024-12-05"
+  }
+]
+
+
+3. Fetch Transactions by Account Number
+Route: GET /api/accounts/:account_number
+
+GET http://localhost:3000/api/accounts/123456789
+
+Response:json
+
+[
+  {
+    "id": 1,
+    "account_number": "123456789",
+    "transaction_amount": 250.50,
+    "transaction_type": "credit",
+    "transaction_date": "2024-12-01"
+  }
+]
+
+If No Transactions Found:json
+
+{
+  "error": "No transactions found for this account"
+}
+
+
+4. Update a Transaction
+Route: PUT /api/accounts/update/:id
+
+PUT http://localhost:3000/api/accounts/update/1
+Content-Type: application/json
+Body:
+{
+  "transaction_amount": 300.00,
+  "transaction_type": "credit"
+}
+
+Response:json
+
+{
+  "message": "Transaction updated successfully"
+}
+
+If Transaction Not Found:json
+
+{
+  "error": "Transaction not found"
+}
+
+
+5. Delete a Transaction
+Route: DELETE /api/accounts/delete/:id
+
+DELETE http://localhost:3000/api/accounts/delete/1
+
+Response:json
+
+{
+  "message": "Transaction deleted successfully"
+}
+
+If Transaction Not Found:json
+
+{
+  "error": "Transaction not found"
+}

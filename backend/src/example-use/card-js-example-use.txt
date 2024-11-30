@@ -1,0 +1,107 @@
+Example Usage of Each Route
+1. Create a New Card
+Route: POST /api/card/create
+
+http
+
+POST http://localhost:3000/api/card/create
+Content-Type: application/json
+Body:
+{
+  "user_id": 1,
+  "card_number": "1234-5678-9876-5432"
+}
+
+Response: json
+
+{
+  "message": "Card created successfully"
+}
+
+
+2. Fetch All Cards
+Route: GET /api/card/all
+
+http
+
+GET http://localhost:3000/api/card/all
+
+Response: json
+
+[
+  {
+    "user_id": 1,
+    "card_number": "1234-5678-9876-5432"
+  },
+  {
+    "user_id": 2,
+    "card_number": "1111-2222-3333-4444"
+  }
+]
+
+3. Fetch Cards by User ID
+Route: GET /api/card/user/:user_id
+
+http
+
+GET http://localhost:3000/api/card/user/1
+
+Response: json
+
+[
+  {
+    "user_id": 1,
+    "card_number": "1234-5678-9876-5432"
+  }
+]
+
+If No Cards Found: json
+
+{
+  "error": "No cards found for this user"
+}
+
+
+4. Update a Card
+Route: PUT /api/card/update/:user_id/:card_number
+
+http
+
+PUT http://localhost:3000/api/card/update/1/1234-5678-9876-5432
+Content-Type: application/json
+Body:
+{
+  "new_card_number": "5678-1234-4321-8765"
+}
+
+Response: json
+
+{
+  "message": "Card updated successfully"
+}
+
+If Card Not Found: json
+
+{
+  "error": "Card not found"
+}
+
+
+5. Delete a Card
+Route: DELETE /api/card/delete/:user_id/:card_number
+
+http
+
+DELETE http://localhost:3000/api/card/delete/1/1234-5678-9876-5432
+
+Response: json
+
+{
+  "message": "Card deleted successfully"
+}
+
+If Card Not Found: json
+
+{
+  "error": "Card not found"
+}

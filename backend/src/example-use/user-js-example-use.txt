@@ -1,0 +1,79 @@
+1. Register a New User
+Route: POST /api/user/register
+
+POST http://localhost:3000/api/user/register
+Content-Type: application/json
+Body:
+{
+  "username": "johndoe",
+  "password": "securepassword",
+  "email": "john.doe@example.com",
+  "profile_picture": "http://example.com/images/johndoe.jpg"
+}
+
+Response: json
+
+{
+  "message": "User registered successfully",
+  "userId": 1
+}
+
+
+2. Fetch All Users
+Route: GET /api/user/all
+
+GET http://localhost:3000/api/user/all
+
+Response: json
+
+[
+  {
+    "user_id": 1,
+    "username": "johndoe",
+    "email": "john.doe@example.com",
+    "profile_picture": "http://example.com/images/johndoe.jpg"
+  }
+]
+
+3. Fetch a User by Username
+Route: GET /api/user/:username
+
+GET http://localhost:3000/api/user/johndoe
+
+Response: json
+
+{
+  "user_id": 1,
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "profile_picture": "http://example.com/images/johndoe.jpg"
+}
+
+4. Update a User by Username
+Route: PUT /api/user/update/:username
+
+PUT http://localhost:3000/api/user/update/johndoe
+Content-Type: application/json
+Body:
+{
+  "email": "john.updated@example.com",
+  "profile_picture": "http://example.com/images/johndoe_new.jpg"
+}
+
+Response: json
+
+{
+  "message": "User updated successfully"
+}
+
+
+5. Delete a User by Username
+Route: DELETE /api/user/delete/:username
+
+DELETE http://localhost:3000/api/user/delete/johndoe
+
+Response: json
+
+{
+  "message": "User deleted successfully"
+}

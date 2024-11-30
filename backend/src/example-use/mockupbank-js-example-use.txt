@@ -1,0 +1,92 @@
+1. Create a New Card
+Route: POST /api/mockupbank/create
+
+
+POST http://localhost:3000/api/mockupbank/create
+Content-Type: application/json
+Body:
+{
+  "card_number": "1234-5678-9876-5432",
+  "card_owner": "John Doe",
+  "expiration": "2024-12",
+  "security_code": "123",
+  "account_number": "987654321"
+}
+
+Response:json
+
+{
+  "message": "Card added to MockupBank successfully"
+}
+
+
+2. Fetch All Cards
+Route: GET /api/mockupbank/all
+
+GET http://localhost:3000/api/mockupbank/all
+
+Response:json
+
+[
+  {
+    "card_number": "1234-5678-9876-5432",
+    "card_owner": "John Doe",
+    "expiration": "2024-12",
+    "security_code": "123",
+    "account_number": "987654321"
+  },
+  {
+    "card_number": "1111-2222-3333-4444",
+    "card_owner": "Jane Doe",
+    "expiration": "2025-06",
+    "security_code": "456",
+    "account_number": "123456789"
+  }
+]
+
+
+3. Fetch a Card by Card Number
+Route: GET /api/mockupbank/:card_number
+
+GET http://localhost:3000/api/mockupbank/1234-5678-9876-5432
+
+Response:json
+
+{
+  "card_number": "1234-5678-9876-5432",
+  "card_owner": "John Doe",
+  "expiration": "2024-12",
+  "security_code": "123",
+  "account_number": "987654321"
+}
+
+4. Update a Card
+Route: PUT /api/mockupbank/update/:card_number
+
+PUT http://localhost:3000/api/mockupbank/update/1234-5678-9876-5432
+Content-Type: application/json
+Body:
+{
+  "card_owner": "John A. Doe",
+  "expiration": "2025-12",
+  "security_code": "999",
+  "account_number": "111222333"
+}
+
+Response:json
+
+{
+  "message": "Card updated successfully in MockupBank"
+}
+
+
+5. Delete a Card
+Route: DELETE /api/mockupbank/delete/:card_number
+
+DELETE http://localhost:3000/api/mockupbank/delete/1234-5678-9876-5432
+
+Response:json
+
+{
+  "message": "Card deleted from MockupBank successfully"
+}
