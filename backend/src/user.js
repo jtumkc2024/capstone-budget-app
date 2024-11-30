@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
 
 // Register a new user
 router.post('/api/user/register', async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, profile_picture } = req.body;
 
   if (!username || !password || !email) {
-    return res.status(400).json({ error: 'Username, password, and email are required' });
+    return res.status(400).json({ error: 'username, password, and email are required' });
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
-      'INSERT INTO User (username, password, email) VALUES (?, ?, ?)',
-      [username, password, email]
+      `INSERT INTO User (username, password, email, profile_picture) 
+      VALUES (?, ?, ?, ?)`,
+      [username, password, email, profile_picture || null]
     );
+
     res.status(201).json({ message: 'User registered successfully', userId: result[0].insertId });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -23,22 +24,24 @@ router.post('/api/user/register', async (req, res) => {
 });
 
 // Fetch all users
-router.get('/api/user/users', async (req, res) => {
+router.get('/api/user/all', async (_, res) => {
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
-    const [rows] = await connection.query('SELECT * FROM User');
+    const connection = await mysql.createConnection(databaseConfig);
+    const [rows] = await connection.query('SELECT user_id, username, email, profile_picture FROM User');
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Fetch a user by username for login
-router.get('/api/user/login/:username', async (req, res) => {
+// Fetch a user by username
+router.get('/api/user/:username', async (req, res) => {
   const { username } = req.params;
+
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
-    const [rows] = await connection.query('SELECT * FROM User WHERE username = ?', [username]);
+    const connection = await mysql.createConnection(databaseConfig);
+    const [rows] = await connection.query('SELECT user_id, username, email, profile_picture FROM User WHERE username = ?', [username]);
+
     if (rows.length > 0) {
       res.json(rows[0]);
     } else {
@@ -52,17 +55,33 @@ router.get('/api/user/login/:username', async (req, res) => {
 // Update a user by username
 router.put('/api/user/update/:username', async (req, res) => {
   const { username } = req.params;
-  const { password, email } = req.body;
+  const { password, email, profile_picture } = req.body;
 
-  if (!password || !email) {
-    return res.status(400).json({ error: 'Password and email are required' });
+  if (!password && !email && !profile_picture) {
+    return res.status(400).json({ error: 'At least one field (password, email, profile_picture) is required to update' });
+  }
+
+  const updates = [];
+  const values = [];
+
+  if (password) {
+    updates.push('password = ?');
+    values.push(password);
+  }
+  if (email) {
+    updates.push('email = ?');
+    values.push(email);
+  }
+  if (profile_picture) {
+    updates.push('profile_picture = ?');
+    values.push(profile_picture);
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
-      'UPDATE User SET password = ?, email = ? WHERE username = ?',
-      [password, email, username]
+      `UPDATE User SET ${updates.join(', ')} WHERE username = ?`,
+      [...values, username]
     );
 
     if (result[0].affectedRows > 0) {
@@ -80,7 +99,7 @@ router.delete('/api/user/delete/:username', async (req, res) => {
   const { username } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query('DELETE FROM User WHERE username = ?', [username]);
 
     if (result[0].affectedRows > 0) {

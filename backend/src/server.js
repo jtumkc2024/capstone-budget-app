@@ -7,6 +7,7 @@ const userRoutes = require('./user'); // Adjust the path if necessary
 const projectRoutes = require('./project'); // Adjust the path if necessary
 const cardRoutes = require('./card'); // Adjust the path if necessary
 const mockupBankRoutes = require('./mockupbank'); // Adjust the path if necessary
+const accountsRoutes = require('./accounts'); // Adjust the path if necessary
 
 const app = express();
 const port = 3001;
@@ -18,7 +19,7 @@ const databaseConfig = {
   host: '127.0.0.1',
   port: 3306,
   user: 'root',
-  password: 'xxxxxxxx',
+  password: 'xxxxxxxxx',
   database: 'commerce-bank-db'
 };
 
@@ -30,13 +31,34 @@ app.use('/', userRoutes);
 app.use('/', projectRoutes);
 app.use('/', cardRoutes);
 app.use('/', mockupBankRoutes);
+app.use('/', accountsRoutes); // Added accounts routes integration
 
-// Example additional routes already present
+// Example existing routes
+app.get('/api/users', async (_, res) => {
+  try {
+    const connection = await mysql.createConnection(databaseConfig);
+    const [rows] = await connection.query('SELECT * FROM User');
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/users/count', async (req, res) => {
   try {
     const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT COUNT(*) AS total_users FROM User');
     res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(databaseConfig);
+    const [rows] = await connection.query('SELECT * FROM Project p WHERE p.user_id = ?', [req.params.id]);
+    res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

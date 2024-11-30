@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
 
 // Create a new project
 router.post('/api/project/create', async (req, res) => {
@@ -11,11 +10,11 @@ router.post('/api/project/create', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
       `INSERT INTO Project (user_id, project_title, project_description, renewable, priority, deadline) 
       VALUES (?, ?, ?, ?, ?, ?)`,
-      [user_id, project_title, project_description, renewable, priority, deadline]
+      [user_id, project_title, project_description || null, renewable || false, priority || 'Normal', deadline]
     );
 
     res.status(201).json({ message: 'Project created successfully', projectId: result[0].insertId });
@@ -25,9 +24,9 @@ router.post('/api/project/create', async (req, res) => {
 });
 
 // Fetch all projects
-router.get('/api/project/all', async (req, res) => {
+router.get('/api/project/all', async (_, res) => {
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Project');
     res.json(rows);
   } catch (error) {
@@ -40,7 +39,7 @@ router.get('/api/project/user/:user_id', async (req, res) => {
   const { user_id } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Project WHERE user_id = ?', [user_id]);
 
     if (rows.length > 0) {
@@ -58,17 +57,39 @@ router.put('/api/project/update/:project_id', async (req, res) => {
   const { project_id } = req.params;
   const { project_title, project_description, renewable, priority, deadline } = req.body;
 
-  if (!project_title || !deadline) {
-    return res.status(400).json({ error: 'project_title and deadline are required' });
+  if (!project_title && !project_description && !renewable && !priority && !deadline) {
+    return res.status(400).json({ error: 'At least one field to update is required' });
+  }
+
+  const updates = [];
+  const values = [];
+
+  if (project_title) {
+    updates.push('project_title = ?');
+    values.push(project_title);
+  }
+  if (project_description) {
+    updates.push('project_description = ?');
+    values.push(project_description);
+  }
+  if (renewable !== undefined) {
+    updates.push('renewable = ?');
+    values.push(renewable);
+  }
+  if (priority) {
+    updates.push('priority = ?');
+    values.push(priority);
+  }
+  if (deadline) {
+    updates.push('deadline = ?');
+    values.push(deadline);
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
-      `UPDATE Project 
-      SET project_title = ?, project_description = ?, renewable = ?, priority = ?, deadline = ? 
-      WHERE project_id = ?`,
-      [project_title, project_description, renewable, priority, deadline, project_id]
+      `UPDATE Project SET ${updates.join(', ')} WHERE project_id = ?`,
+      [...values, project_id]
     );
 
     if (result[0].affectedRows > 0) {
@@ -86,7 +107,7 @@ router.delete('/api/project/delete/:project_id', async (req, res) => {
   const { project_id } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query('DELETE FROM Project WHERE project_id = ?', [project_id]);
 
     if (result[0].affectedRows > 0) {

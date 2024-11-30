@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
 
 // Create a new card in mockupbank
 router.post('/api/mockupbank/create', async (req, res) => {
-  const { card_number, card_owner, expiration, security_code } = req.body;
+  const { card_number, card_owner, expiration, security_code, account_number } = req.body;
 
-  if (!card_number || !card_owner || !expiration || !security_code) {
-    return res.status(400).json({ error: 'card_number, card_owner, expiration, and security_code are required' });
+  if (!card_number || !card_owner || !expiration || !security_code || !account_number) {
+    return res.status(400).json({
+      error: 'card_number, card_owner, expiration, security_code, and account_number are required'
+    });
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
-      `INSERT INTO MockupBank (card_number, card_owner, expiration, security_code) 
-      VALUES (?, ?, ?, ?)`,
-      [card_number, card_owner, expiration, security_code]
+      `INSERT INTO MockupBank (card_number, card_owner, expiration, security_code, account_number) 
+      VALUES (?, ?, ?, ?, ?)`,
+      [card_number, card_owner, expiration, security_code, account_number]
     );
 
     res.status(201).json({ message: 'Card added to MockupBank successfully' });
@@ -25,9 +26,9 @@ router.post('/api/mockupbank/create', async (req, res) => {
 });
 
 // Fetch all cards in mockupbank
-router.get('/api/mockupbank/all', async (req, res) => {
+router.get('/api/mockupbank/all', async (_, res) => {
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM MockupBank');
     res.json(rows);
   } catch (error) {
@@ -40,7 +41,7 @@ router.get('/api/mockupbank/:card_number', async (req, res) => {
   const { card_number } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM MockupBank WHERE card_number = ?', [card_number]);
 
     if (rows.length > 0) {
@@ -56,19 +57,37 @@ router.get('/api/mockupbank/:card_number', async (req, res) => {
 // Update a card in mockupbank by card number
 router.put('/api/mockupbank/update/:card_number', async (req, res) => {
   const { card_number } = req.params;
-  const { card_owner, expiration, security_code } = req.body;
+  const { card_owner, expiration, security_code, account_number } = req.body;
 
-  if (!card_owner || !expiration || !security_code) {
-    return res.status(400).json({ error: 'card_owner, expiration, and security_code are required' });
+  if (!card_owner && !expiration && !security_code && !account_number) {
+    return res.status(400).json({ error: 'At least one field to update is required' });
+  }
+
+  const updates = [];
+  const values = [];
+
+  if (card_owner) {
+    updates.push('card_owner = ?');
+    values.push(card_owner);
+  }
+  if (expiration) {
+    updates.push('expiration = ?');
+    values.push(expiration);
+  }
+  if (security_code) {
+    updates.push('security_code = ?');
+    values.push(security_code);
+  }
+  if (account_number) {
+    updates.push('account_number = ?');
+    values.push(account_number);
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
-      `UPDATE MockupBank 
-      SET card_owner = ?, expiration = ?, security_code = ? 
-      WHERE card_number = ?`,
-      [card_owner, expiration, security_code, card_number]
+      `UPDATE MockupBank SET ${updates.join(', ')} WHERE card_number = ?`,
+      [...values, card_number]
     );
 
     if (result[0].affectedRows > 0) {
@@ -86,7 +105,7 @@ router.delete('/api/mockupbank/delete/:card_number', async (req, res) => {
   const { card_number } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query('DELETE FROM MockupBank WHERE card_number = ?', [card_number]);
 
     if (result[0].affectedRows > 0) {

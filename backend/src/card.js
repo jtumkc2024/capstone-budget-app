@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
 
 // Create a new card
 router.post('/api/card/create', async (req, res) => {
@@ -11,7 +10,7 @@ router.post('/api/card/create', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
       `INSERT INTO Card (user_id, card_number) VALUES (?, ?)`,
       [user_id, card_number]
@@ -24,9 +23,9 @@ router.post('/api/card/create', async (req, res) => {
 });
 
 // Fetch all cards
-router.get('/api/card/all', async (req, res) => {
+router.get('/api/card/all', async (_, res) => {
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Card');
     res.json(rows);
   } catch (error) {
@@ -39,7 +38,7 @@ router.get('/api/card/user/:user_id', async (req, res) => {
   const { user_id } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Card WHERE user_id = ?', [user_id]);
 
     if (rows.length > 0) {
@@ -62,7 +61,7 @@ router.put('/api/card/update/:user_id/:card_number', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query(
       `UPDATE Card SET card_number = ? WHERE user_id = ? AND card_number = ?`,
       [new_card_number, user_id, card_number]
@@ -83,7 +82,7 @@ router.delete('/api/card/delete/:user_id/:card_number', async (req, res) => {
   const { user_id, card_number } = req.params;
 
   try {
-    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
+    const connection = await mysql.createConnection(databaseConfig);
     const result = await connection.query('DELETE FROM Card WHERE user_id = ? AND card_number = ?', [user_id, card_number]);
 
     if (result[0].affectedRows > 0) {
