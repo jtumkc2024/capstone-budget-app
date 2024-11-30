@@ -15,11 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 const databaseConfig = {
-  host: '192.168.215.2',
+  host: '127.0.0.1',
   port: 3306,
   user: 'root',
-  password: '1234qwerASDF',
-  database: 'sys'
+  password: 'xxxxxxxx',
+  database: 'commerce-bank-db'
 };
 
 // Attach databaseConfig to app for shared use in route files
