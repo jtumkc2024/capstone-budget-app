@@ -15,11 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 const databaseConfig = {
-  host: '127.0.0.1',
+  host: '192.168.215.2',
   port: 3306,
   user: 'root',
-  password: 'xxxxxxxx',
-  database: 'commerce-bank-db'
+  password: '1234qwerASDF',
+  database: 'sys'
 };
 
 // Attach databaseConfig to app for shared use in route files
@@ -32,31 +32,11 @@ app.use('/', cardRoutes);
 app.use('/', mockupBankRoutes);
 
 // Example additional routes already present
-app.get('/api/users', async (_, res) => {
-  try {
-    const connection = await mysql.createConnection(databaseConfig);
-    const [rows] = await connection.query('SELECT * FROM User');
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 app.get('/api/users/count', async (req, res) => {
   try {
     const connection = await mysql.createConnection(databaseConfig);
     const [rows] = await connection.query('SELECT COUNT(*) AS total_users FROM User');
     res.json(rows[0]);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/users/:id', async (req, res) => {
-  try {
-    const connection = await mysql.createConnection(databaseConfig);
-    const [rows] = await connection.query('SELECT * FROM Project p WHERE p.user_id = ?', [req.params.id]);
-    res.json(rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -8,7 +8,7 @@ export default function Dashboard() {
 
   const fetchUsers = async () => {
       try {
-          const response = await axios.get('http://localhost:3001/api/users');
+          const response = await axios.get('http://localhost:3001/api/user/users');
           setUsers(response.data);
       } catch (error) {
           console.error('There was an error fetching the data!', error);
@@ -26,7 +26,7 @@ export default function Dashboard() {
 
   const fetchProject = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/users/${id}`);
+      const response = await axios.get(`http://localhost:3001/api/project/user/${id}`);
       
       setProjects(response.data.map((project) => ({
         projectId: project.project_id,

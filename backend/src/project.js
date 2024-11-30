@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('mysql2/promise');
 
 // Create a new project
 router.post('/api/project/create', async (req, res) => {
@@ -10,7 +11,7 @@ router.post('/api/project/create', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query(
       `INSERT INTO Project (user_id, project_title, project_description, renewable, priority, deadline) 
       VALUES (?, ?, ?, ?, ?, ?)`,
@@ -24,9 +25,9 @@ router.post('/api/project/create', async (req, res) => {
 });
 
 // Fetch all projects
-router.get('/api/project/all', async (_, res) => {
+router.get('/api/project/all', async (req, res) => {
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Project');
     res.json(rows);
   } catch (error) {
@@ -39,7 +40,7 @@ router.get('/api/project/user/:user_id', async (req, res) => {
   const { user_id } = req.params;
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const [rows] = await connection.query('SELECT * FROM Project WHERE user_id = ?', [user_id]);
 
     if (rows.length > 0) {
@@ -62,7 +63,7 @@ router.put('/api/project/update/:project_id', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query(
       `UPDATE Project 
       SET project_title = ?, project_description = ?, renewable = ?, priority = ?, deadline = ? 
@@ -85,7 +86,7 @@ router.delete('/api/project/delete/:project_id', async (req, res) => {
   const { project_id } = req.params;
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query('DELETE FROM Project WHERE project_id = ?', [project_id]);
 
     if (result[0].affectedRows > 0) {

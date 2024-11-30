@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('mysql2/promise');
 
 // Create a new card in mockupbank
 router.post('/api/mockupbank/create', async (req, res) => {
@@ -10,7 +11,7 @@ router.post('/api/mockupbank/create', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query(
       `INSERT INTO MockupBank (card_number, card_owner, expiration, security_code) 
       VALUES (?, ?, ?, ?)`,
@@ -24,9 +25,9 @@ router.post('/api/mockupbank/create', async (req, res) => {
 });
 
 // Fetch all cards in mockupbank
-router.get('/api/mockupbank/all', async (_, res) => {
+router.get('/api/mockupbank/all', async (req, res) => {
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const [rows] = await connection.query('SELECT * FROM MockupBank');
     res.json(rows);
   } catch (error) {
@@ -39,7 +40,7 @@ router.get('/api/mockupbank/:card_number', async (req, res) => {
   const { card_number } = req.params;
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const [rows] = await connection.query('SELECT * FROM MockupBank WHERE card_number = ?', [card_number]);
 
     if (rows.length > 0) {
@@ -62,7 +63,7 @@ router.put('/api/mockupbank/update/:card_number', async (req, res) => {
   }
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query(
       `UPDATE MockupBank 
       SET card_owner = ?, expiration = ?, security_code = ? 
@@ -85,7 +86,7 @@ router.delete('/api/mockupbank/delete/:card_number', async (req, res) => {
   const { card_number } = req.params;
 
   try {
-    const connection = await mysql.createConnection(databaseConfig);
+    const connection = await mysql.createConnection(req.app.locals.databaseConfig);
     const result = await connection.query('DELETE FROM MockupBank WHERE card_number = ?', [card_number]);
 
     if (result[0].affectedRows > 0) {
