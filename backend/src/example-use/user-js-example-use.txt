@@ -1,18 +1,17 @@
 1. Register a New User
 Route: POST /api/user/register
 
-Example Request: http
-
 POST http://localhost:3000/api/user/register
 Content-Type: application/json
 Body:
 {
   "username": "johndoe",
   "password": "securepassword",
-  "email": "john.doe@example.com"
+  "email": "john.doe@example.com",
+  "profile_picture": "http://example.com/images/johndoe.jpg"
 }
 
-Example Response: json
+Response: json
 
 {
   "message": "User registered successfully",
@@ -21,93 +20,60 @@ Example Response: json
 
 
 2. Fetch All Users
-Route: GET /api/user/users
+Route: GET /api/user/all
 
-Example Request: http
+GET http://localhost:3000/api/user/all
 
-GET http://localhost:3000/api/user/users
-
-Example Response: json
+Response: json
 
 [
   {
     "user_id": 1,
     "username": "johndoe",
-    "password": "securepassword",
-    "email": "john.doe@example.com"
-  },
-  {
-    "user_id": 2,
-    "username": "janedoe",
-    "password": "password123",
-    "email": "jane.doe@example.com"
+    "email": "john.doe@example.com",
+    "profile_picture": "http://example.com/images/johndoe.jpg"
   }
 ]
 
+3. Fetch a User by Username
+Route: GET /api/user/:username
 
-3. Fetch a User by Username for Login
-Route: GET /api/user/login/:username
+GET http://localhost:3000/api/user/johndoe
 
-Example Request: http
-
-GET http://localhost:3000/api/user/login/johndoe
-
-Example Response: json
+Response: json
 
 {
   "user_id": 1,
   "username": "johndoe",
-  "password": "securepassword",
-  "email": "john.doe@example.com"
+  "email": "john.doe@example.com",
+  "profile_picture": "http://example.com/images/johndoe.jpg"
 }
-
-If User Not Found: json
-
-{
-  "error": "User not found"
-}
-
 
 4. Update a User by Username
 Route: PUT /api/user/update/:username
-
-Example Request: http
 
 PUT http://localhost:3000/api/user/update/johndoe
 Content-Type: application/json
 Body:
 {
-  "password": "newsecurepassword",
-  "email": "john.doe_updated@example.com"
+  "email": "john.updated@example.com",
+  "profile_picture": "http://example.com/images/johndoe_new.jpg"
 }
 
-Example Response: json
+Response: json
 
 {
   "message": "User updated successfully"
 }
 
-If User Not Found: json
-
-{
-  "error": "User not found"
-}
 
 5. Delete a User by Username
 Route: DELETE /api/user/delete/:username
 
-Example Request: http
-
 DELETE http://localhost:3000/api/user/delete/johndoe
 
-Example Response: json
+Response: json
 
 {
   "message": "User deleted successfully"
-}
-
-If User Not Found: json
-
-{
-  "error": "User not found"
 }
