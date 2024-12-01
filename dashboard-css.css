@@ -1,35 +1,8 @@
-.scroll {
-	display: flex;
-	height: 50px;
-	column-gap: 40px;
-	overflow: hidden;
-	white-space: nowrap;
-	animation: marquee 30s linear infinite;
-}
-
-@keyframes marquee {
-	0% {
-		transform: translateX(0%)
-	}
-	100% {
-		transform: translateX(-100%);
-	}
-}
-
-.scroll:hover {
-
-	animation-play-state: paused;
-}
-
-.scroll p:hover {
-	text-decoration: underline;
-	cursor: pointer;
-}
-
 #projectDiv {
 	width: 350px;
-	height: auto;
+	height: 450px;
 	margin: auto;
+	border-radius: 25px;
 	border: 5px solid green;
 	background-color: white;
 }
