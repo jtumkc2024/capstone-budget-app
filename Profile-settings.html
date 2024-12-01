@@ -13,14 +13,24 @@
 
 </head>
 
-<body>
-<div class = "border-bottom">
-    <a href = "dashboard.html" target = "_self"><button id = "cancel" style="margin:25px">Back to Dashboard</button></a>
+<body style = "background-color: #F5F5F5">
+    <nav class="navbar" style="background-color:#156e41">
+	<div class="container-fluid">
+	    <a class="navbar-brand" href="dashboard.html" target="_self" style="color:white"><h3>Back</h3></a>
+	    <h3 style="margin-right:45%; color:white">Profile Settings</h3>
+	</div>
+    </nav>
+    <nav aria-label="breadcrumb" style="margin:20px">
+	<strong><ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+	</ol></strong>
+    </nav>
     <div id = "profile picture">
         <image src = "profile-picture-placeholder.jpg" alt = "Profile Picture" style = "display: block; margin-left:auto; margin-right: auto; border-radius:50%" height = "200" width = "200">
     </div>
     <div>
-        <button type = "button" style = "display: block; margin-left:auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px">Change picture</button>
+        <button class="btn btn-secondary" type = "button" style = "display: block; margin-left:auto; margin-right: auto; margin-top: 50px; margin-bottom: 50px">Change picture</button>
     </div>
 </div>
 
@@ -40,7 +50,7 @@
                 <li>The password must contain an uppercase letter.</li>
             </ul>
         </div>
-            <button type = "submit" style = "margin-top:10px">Change Password</button>
+            <button class="btn btn-info" type = "submit" style = "margin-top:10px">Change Password</button>
         </form>
     </div>
 	<script src = "profile-settings.js"></script>
