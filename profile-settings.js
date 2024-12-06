@@ -53,3 +53,23 @@ function validate() {
 	}
 	return isValid;
 }
+
+        // FOR THE PROFILE PICTURE YOU CAN CHANGE THE .JPG AND THE NAME OF THE PICTURE ABOVE (LINE 55-58)
+        function togglePictureOptions() {
+            const optionsContainer = document.getElementById('picture-options'); 
+            const options = document.querySelectorAll('.profile-pic-option');
+
+            if (optionsContainer.style.display === 'none' || optionsContainer.style.display === '') {
+                optionsContainer.style.display = 'flex'; // Show container
+                options.forEach(option => option.style.display = 'inline-block'); // Show each image
+            } else {
+                optionsContainer.style.display = 'none'; // Hide container
+            }
+        }
+
+        function selectPicture(element) {
+            const options = document.querySelectorAll('.profile-pic-option');
+            options.forEach(option => option.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('mainProfilePicture').src = element.src;
+        }
