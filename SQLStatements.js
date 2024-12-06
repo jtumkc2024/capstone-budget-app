@@ -176,13 +176,3 @@ export function deleteCard(userId, cardNumber) {
         connection.end();
     }
 }
-
-//export {registerUser};
-//export {loginUser};
-//export {addProject};
-//export {updateProject};
-//export {deleteProject};
-//export {updateUserSettings};
-//export {verifyCardExists};
-//export {addCard};
-//export {deleteCard};
